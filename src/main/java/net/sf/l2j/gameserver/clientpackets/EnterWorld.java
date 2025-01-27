@@ -228,22 +228,10 @@ public class EnterWorld extends L2GameClientPacket
 		sendPacket(sm);
 		
 		sm = new SystemMessage(SystemMessageId.S1_S2);
-		sm.addString(getText("V2VsY29tZSB0byBhIEwySiBTZXJ2ZXIsIGZvdW5kZWQgYnkgTDJDaGVmLg=="));
+		sm.addString(getText("V2VsY29tZSB0byB0aGUgV29ybGQgb2YgTGluZWFnZSBJSS4="));
 		
 		sendPacket(sm);
-		sm = new SystemMessage(SystemMessageId.S1_S2);
-		sm.addString(getText("RGV2ZWxvcGVkIGJ5IHRoZSBMMkogRGV2IFRlYW0gYXQgbDJqc2VydmVyLmNvbS4="));
-		
-		sendPacket(sm);
-		
-		sm = new SystemMessage(SystemMessageId.S1_S2);
-		sm.addString(getText("Q29weXJpZ2h0IDIwMDQtMjAwNw=="));
-		sendPacket(sm);
-		sm = new SystemMessage(SystemMessageId.S1_S2);
-		sm.addString(getText("V2VsY29tZSB0byA="));
-		sm.addString(LoginServerThread.getInstance().getServerName());
-		sendPacket(sm);
-		
+				
 		SevenSigns.getInstance().sendCurrentPeriodMsg(activeChar);
 		Announcements.getInstance().showAnnouncements(activeChar);
 		
