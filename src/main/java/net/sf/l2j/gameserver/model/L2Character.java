@@ -6673,7 +6673,7 @@ public abstract class L2Character extends L2Object
 	public void onMagicLaunchedTimer(L2Object[] targets, L2Skill skill, int coolTime, boolean instant)
 	{
 		System.out.println("onMagicLaunchedTimer called for skill: " + skill.getName() + " (ID: " + skill.getId() + ")");
-
+	
 		if ((skill == null) || (targets == null) || (targets.length <= 0))
 		{
 			_skillCast = null;
@@ -6723,11 +6723,6 @@ public abstract class L2Character extends L2Object
 					}
 					targetList.add((L2Character) targets[i]);
 				}
-				// else
-				// {
-				// if (Config.DEBUG)
-				// _log.warning("Class cast bad: "+targets[i].getClass().toString());
-				// }
 			}
 			if (targetList.isEmpty())
 			{
@@ -6771,13 +6766,12 @@ public abstract class L2Character extends L2Object
 		
 		if (instant)
 		{
-			onMagicHitTimer(targets, skill, coolTime, true);
+			onMagicUseTimer(targets, skill, coolTime, true);
 		}
 		else
 		{
 			_skillCast = ThreadPoolManager.getInstance().scheduleEffect(new MagicUseTask(targets, skill, coolTime, 2), 200);
 		}
-		
 	}
 	
 	/*
