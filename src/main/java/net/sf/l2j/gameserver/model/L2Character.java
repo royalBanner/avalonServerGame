@@ -1599,6 +1599,45 @@ public abstract class L2Character extends L2Object
 		// Log the completion of the casting process
 		System.out.println("Completed casting skill: " + skill.getName() + " (ID: " + skill.getId() + ")");
 	}
+
+	public void onMagicUseTimer(L2Object[] targets, L2Skill skill, int coolTime, boolean instant)
+	{
+		System.out.println("onMagicUseTimer called for skill: " + skill.getName() + " (ID: " + skill.getId() + ")");
+	
+		// Implement the logic for using the magic skill
+		// This is a placeholder implementation and should be replaced with the actual logic
+		for (L2Object target : targets)
+		{
+			if (target instanceof L2Character)
+			{
+				L2Character characterTarget = (L2Character) target;
+				// Apply the skill effects to the target
+				skill.getEffects(this, characterTarget);
+			}
+		}
+	
+		// Schedule the finalizer to complete the casting process
+		ThreadPoolManager.getInstance().scheduleEffect(new MagicUseFinalizer(targets, skill), coolTime);
+	}
+	
+	// Inner class to handle the finalization of the magic use
+	private class MagicUseFinalizer implements Runnable
+	{
+		private final L2Object[] _targets;
+		private final L2Skill _skill;
+	
+		public MagicUseFinalizer(L2Object[] targets, L2Skill skill)
+		{
+			_targets = targets;
+			_skill = skill;
+		}
+	
+		@Override
+		public void run()
+		{
+			onMagicFinalizer(_targets, _skill);
+		}
+	}
 	
 	/**
 	 * Index according to skill id the current timestamp of use.<br>
@@ -6867,7 +6906,22 @@ public abstract class L2Character extends L2Object
 	public void onMagicFinalizer(L2Object[] targets, L2Skill skill)
 	{
 		System.out.println("onMagicFinalizer called for skill: " + skill.getName() + " (ID: " + skill.getId() + ")");
-		
+		// Implement the logic for finalizing the magic use
+		// This is a placeholder implementation and should be replaced with the actual logic
+		for (L2Object target : targets)
+		{
+			if (target instanceof L2Character)
+			{
+				L2Character characterTarget = (L2Character) target;
+				// Apply the final effects of the skill to the target
+				skill.getEffects(this, characterTarget);
+			}
+		}
+	
+		// Enable all skills after the casting is complete
+		enableAllSkills();
+		getAI().notifyEvent(CtrlEvent.EVT_FINISH_CASTING);
+
 		_skillCast = null;
 		_castEndTime = 0;
 		_castInterruptTime = 0;
