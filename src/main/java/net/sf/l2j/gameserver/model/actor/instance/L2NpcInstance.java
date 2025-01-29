@@ -1873,6 +1873,8 @@ public class L2NpcInstance extends L2Character
 		// Go through the Helper Buff list define in sql table helper_buff_list and cast skill
 		for (L2HelperBuff helperBuffItem : HelperBuffTable.getInstance().getHelperBuffTable())
 		{
+			System.out.println("Checking helper buff: " + helperBuffItem.getSkillID());
+			
 			if (helperBuffItem.isMagicClassBuff() == player.isMageClass())
 			{
 				if ((player_level >= helperBuffItem.getLowerLevel()) && (player_level <= helperBuffItem.getUpperLevel()))

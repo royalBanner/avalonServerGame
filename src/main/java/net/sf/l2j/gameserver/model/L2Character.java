@@ -1342,6 +1342,8 @@ public abstract class L2Character extends L2Object
 			getAI().notifyEvent(CtrlEvent.EVT_CANCEL);
 			return;
 		}
+
+		System.out.println("Casting skill: " + skill.getName() + " (ID: " + skill.getId() + ")");
 		
 		if (isSkillDisabled(skill.getId()))
 		{
