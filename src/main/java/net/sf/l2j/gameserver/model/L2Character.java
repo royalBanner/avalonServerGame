@@ -1639,6 +1639,25 @@ public abstract class L2Character extends L2Object
 		}
 	}
 	
+	// Inner class to handle the finalization of the magic use
+	private class onMagicUseFinalizer implements Runnable
+	{
+		private final L2Object[] _targets;
+		private final L2Skill _skill;
+	
+		public onMagicUseFinalizer(L2Object[] targets, L2Skill skill)
+		{
+			_targets = targets;
+			_skill = skill;
+		}
+	
+		@Override
+		public void run()
+		{
+			onMagicFinalizer(_targets, _skill);
+		}
+	}
+	
 	/**
 	 * Index according to skill id the current timestamp of use.<br>
 	 * <br>
@@ -6915,7 +6934,7 @@ public abstract class L2Character extends L2Object
 		// Enable all skills after the casting is complete
 		enableAllSkills();
 		getAI().notifyEvent(CtrlEvent.EVT_FINISH_CASTING);
-
+	
 		_skillCast = null;
 		_castEndTime = 0;
 		_castInterruptTime = 0;
