@@ -6770,7 +6770,7 @@ public abstract class L2Character extends L2Object
 		}
 		else
 		{
-			_skillCast = ThreadPoolManager.getInstance().scheduleEffect(new MagicUseTask(targets, skill, coolTime, 2), 200);
+			_skillCast = ThreadPoolManager.getInstance().scheduleEffect(new MagicUseTask(targets, skill, coolTime, 1), 200);
 		}
 	}
 	
