@@ -1873,24 +1873,27 @@ public class L2NpcInstance extends L2Character
 		// Go through the Helper Buff list define in sql table helper_buff_list and cast skill
 		for (L2HelperBuff helperBuffItem : HelperBuffTable.getInstance().getHelperBuffTable())
 		{
-    		System.out.println("Checking helper buff: " + helperBuffItem.getSkillID());
-
-    		if (helperBuffItem.isMagicClassBuff() == player.isMageClass())
-    		{
-        		if ((player_level >= helperBuffItem.getLowerLevel()) && (player_level <= helperBuffItem.getUpperLevel()))
-        		{
-            		skill = SkillTable.getInstance().getInfo(helperBuffItem.getSkillID(), helperBuffItem.getSkillLevel());
-            		System.out.println("Casting skill: " + skill.getName() + " (ID: " + skill.getId() + ")");
-            		if (skill.getSkillType() == SkillType.SUMMON)
-            		{
-                		player.doCast(skill);
-            		}
-            		else
-            		{
-                	doCast(skill);
-            		}
-        		}
-    		}
+			System.out.println("Checking helper buff: " + helperBuffItem.getSkillID());
+		
+			if (helperBuffItem.isMagicClassBuff() == player.isMageClass())
+			{
+				if ((player_level >= helperBuffItem.getLowerLevel()) && (player_level <= helperBuffItem.getUpperLevel()))
+				{
+					skill = SkillTable.getInstance().getInfo(helperBuffItem.getSkillID(), helperBuffItem.getSkillLevel());
+					System.out.println("Preparing to cast skill: " + skill.getName() + " (ID: " + skill.getId() + ")");
+					if (skill.getSkillType() == SkillType.SUMMON)
+					{
+						System.out.println("Calling player.doCast for skill: " + skill.getName() + " (ID: " + skill.getId() + ")");
+						player.doCast(skill);
+					}
+					else
+					{
+						System.out.println("Calling doCast for skill: " + skill.getName() + " (ID: " + skill.getId() + ")");
+						doCast(skill);
+					}
+					System.out.println("Finished casting skill: " + skill.getName() + " (ID: " + skill.getId() + ")");
+				}
+			}
 		}
 		
 	}
