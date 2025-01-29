@@ -6633,6 +6633,8 @@ public abstract class L2Character extends L2Object
 	 */
 	public void onMagicLaunchedTimer(L2Object[] targets, L2Skill skill, int coolTime, boolean instant)
 	{
+		System.out.println("onMagicLaunchedTimer called for skill: " + skill.getName() + " (ID: " + skill.getId() + ")");
+
 		if ((skill == null) || (targets == null) || (targets.length <= 0))
 		{
 			_skillCast = null;
@@ -6864,6 +6866,8 @@ public abstract class L2Character extends L2Object
 	 */
 	public void onMagicFinalizer(L2Object[] targets, L2Skill skill)
 	{
+		System.out.println("onMagicFinalizer called for skill: " + skill.getName() + " (ID: " + skill.getId() + ")");
+		
 		_skillCast = null;
 		_castEndTime = 0;
 		_castInterruptTime = 0;
