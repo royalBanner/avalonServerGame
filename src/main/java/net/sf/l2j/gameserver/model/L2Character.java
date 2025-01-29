@@ -1342,9 +1342,9 @@ public abstract class L2Character extends L2Object
 			getAI().notifyEvent(CtrlEvent.EVT_CANCEL);
 			return;
 		}
-
+	
 		System.out.println("Casting skill: " + skill.getName() + " (ID: " + skill.getId() + ")");
-
+	
 		if (isSkillDisabled(skill.getId()))
 		{
 			if (this instanceof L2PcInstance)
@@ -1353,10 +1353,10 @@ public abstract class L2Character extends L2Object
 				sm.addSkillName(skill.getId(), skill.getLevel());
 				sendPacket(sm);
 			}
-
+	
 			return;
 		}
-
+	
 		// Check if the skill is a magic spell and if the L2Character is not muted
 		if (skill.isMagic() && isMuted() && !skill.isPotion())
 		{
@@ -1369,7 +1369,7 @@ public abstract class L2Character extends L2Object
 			getAI().notifyEvent(CtrlEvent.EVT_CANCEL);
 			return;
 		}
-
+	
 		// Can't use Hero and resurrect skills during Olympiad
 		if ((this instanceof L2PcInstance) && ((L2PcInstance) this).isInOlympiadMode() && (skill.isHeroSkill() || (skill.getSkillType() == SkillType.RESURRECT)))
 		{
@@ -1377,7 +1377,7 @@ public abstract class L2Character extends L2Object
 			sendPacket(sm);
 			return;
 		}
-
+	
 		// Recharge AutoSoulShot
 		if (skill.useSoulShot())
 		{
@@ -1401,30 +1401,30 @@ public abstract class L2Character extends L2Object
 				((L2Summon) this).getOwner().rechargeAutoSoulShot(false, true, true);
 			}
 		}
-
+	
 		// Get all possible targets of the skill in a table in function of the skill target type
 		L2Object[] targets = skill.getTargetList(this);
-
+	
 		if ((targets == null) || (targets.length == 0))
 		{
 			getAI().notifyEvent(CtrlEvent.EVT_CANCEL);
 			return;
 		}
-
+	
 		// Set the target of the skill in function of Skill Type and Target Type
 		L2Character target = null;
-
+	
 		if ((skill.getSkillType() == SkillType.BUFF) || (skill.getSkillType() == SkillType.HEAL) || (skill.getSkillType() == SkillType.COMBATPOINTHEAL) || (skill.getSkillType() == SkillType.MANAHEAL) || (skill.getSkillType() == SkillType.REFLECT) || (skill.getSkillType() == SkillType.SEED) || (skill.getTargetType() == L2Skill.SkillTargetType.TARGET_SELF) || (skill.getTargetType() == L2Skill.SkillTargetType.TARGET_PET) || (skill.getTargetType() == L2Skill.SkillTargetType.TARGET_PARTY) || (skill.getTargetType() == L2Skill.SkillTargetType.TARGET_CLAN) || (skill.getTargetType() == L2Skill.SkillTargetType.TARGET_ALLY))
 		{
 			target = (L2Character) targets[0];
-
+	
 			if ((this instanceof L2PcInstance) && (target instanceof L2PcInstance) && (target.getAI().getIntention() == CtrlIntention.AI_INTENTION_ATTACK))
 			{
 				if ((skill.getSkillType() == SkillType.BUFF) || (skill.getSkillType() == SkillType.HOT) || (skill.getSkillType() == SkillType.HEAL) || (skill.getSkillType() == SkillType.HEAL_PERCENT) || (skill.getSkillType() == SkillType.MANAHEAL) || (skill.getSkillType() == SkillType.MANAHEAL_PERCENT) || (skill.getSkillType() == SkillType.BALANCE_LIFE))
 				{
 					target.setLastBuffer(this);
 				}
-
+	
 				if (((L2PcInstance) this).isInParty() && (skill.getTargetType() == L2Skill.SkillTargetType.TARGET_PARTY))
 				{
 					for (L2PcInstance member : ((L2PcInstance) this).getParty().getPartyMembers())
@@ -1438,41 +1438,41 @@ public abstract class L2Character extends L2Object
 		{
 			target = (L2Character) getTarget();
 		}
-
+	
 		// AURA skills should always be using caster as target
 		if (skill.getTargetType() == SkillTargetType.TARGET_AURA)
 		{
 			target = this;
 		}
-
+	
 		if (target == null)
 		{
 			getAI().notifyEvent(CtrlEvent.EVT_CANCEL);
 			return;
 		}
-
+	
 		setLastSkillCast(skill);
-
+	
 		// Get the Identifier of the skill
 		int magicId = skill.getId();
-
+	
 		// Get the Display Identifier for a skill that client can't display
 		int displayId = skill.getDisplayId();
-
+	
 		// Get the level of the skill
 		int level = skill.getLevel();
-
+	
 		if (level < 1)
 		{
 			level = 1;
 		}
-
+	
 		// Get the casting time of the skill (base)
 		int hitTime = skill.getHitTime();
 		int coolTime = skill.getCoolTime();
-
+	
 		boolean forceBuff = (skill.getSkillType() == SkillType.FORCE_BUFF) && (target instanceof L2PcInstance);
-
+	
 		// Calculate the casting time of the skill (base + modifier of MAtkSpd)
 		// Don't modify the skill time for FORCE_BUFF skills. The skill time for those skills represent the buff time.
 		if (!forceBuff)
@@ -1483,10 +1483,10 @@ public abstract class L2Character extends L2Object
 				coolTime = Formulas.getInstance().calcMAtkSpd(this, skill, coolTime);
 			}
 		}
-
+	
 		// Calculate altered Cast Speed due to BSpS/SpS
 		L2ItemInstance weaponInst = getActiveWeaponInstance();
-
+	
 		if ((weaponInst != null) && skill.isMagic() && !forceBuff && (skill.getTargetType() != SkillTargetType.TARGET_SELF))
 		{
 			if ((weaponInst.getChargedSpiritshot() == L2ItemInstance.CHARGED_BLESSED_SPIRITSHOT) || (weaponInst.getChargedSpiritshot() == L2ItemInstance.CHARGED_SPIRITSHOT))
@@ -1494,7 +1494,7 @@ public abstract class L2Character extends L2Object
 				// Only takes 70% of the time to cast a BSpS/SpS cast
 				hitTime = (int) (0.70 * hitTime);
 				coolTime = (int) (0.70 * coolTime);
-
+	
 				// Because the following are magic skills that do not actively 'eat' BSpS/SpS,
 				// I must 'eat' them here so players don't take advantage of infinite speed increase
 				if ((skill.getSkillType() == SkillType.BUFF) || (skill.getSkillType() == SkillType.MANAHEAL) || (skill.getSkillType() == SkillType.RESURRECT) || (skill.getSkillType() == SkillType.RECALL) ||
@@ -1510,33 +1510,35 @@ public abstract class L2Character extends L2Object
 				}
 			}
 		}
-
+	
 		// Set the _castEndTime and _castInterruptTim. +10 ticks for lag situations, will be reseted in onMagicFinalizer
 		_castEndTime = 10 + GameTimeController.getGameTicks() + ((coolTime + hitTime) / GameTimeController.MILLIS_IN_TICK);
 		_castInterruptTime = -2 + GameTimeController.getGameTicks() + (hitTime / GameTimeController.MILLIS_IN_TICK);
-
+	
 		// Init the reuse time of the skill
 		int reuseDelay = (int) (skill.getReuseDelay() * getStat().getMReuseRate(skill));
 		reuseDelay *= 333.0 / (skill.isMagic() ? getMAtkSpd() : getPAtkSpd());
-
+	
 		// Send a Server->Client packet MagicSkillUser with target, displayId, level, skillTime, reuseDelay
 		// to the L2Character AND to all L2PcInstance in the _KnownPlayers of the L2Character
+		System.out.println("Sending MagicSkillUser packet for skill: " + skill.getName() + " (ID: " + skill.getId() + ")");
 		broadcastPacket(new MagicSkillUser(this, target, displayId, level, hitTime, reuseDelay));
-
+	
 		// Send a system message USE_S1 to the L2Character
 		if ((this instanceof L2PcInstance) && (magicId != 1312))
 		{
 			SystemMessage sm = new SystemMessage(SystemMessageId.USE_S1);
 			sm.addSkillName(magicId, skill.getLevel());
 			sendPacket(sm);
+			System.out.println("Sent system message USE_S1 for skill: " + skill.getName() + " (ID: " + skill.getId() + ")");
 		}
-
+	
 		// Skill reuse check
 		if (reuseDelay > 30000)
 		{
 			addTimeStamp(skill.getId(), reuseDelay);
 		}
-
+	
 		// Check if this skill consume mp on start casting
 		int initmpcons = getStat().getMpInitialConsume(skill);
 		if (initmpcons > 0)
@@ -1546,19 +1548,19 @@ public abstract class L2Character extends L2Object
 			su.addAttribute(StatusUpdate.CUR_MP, (int) getCurrentMp());
 			sendPacket(su);
 		}
-
+	
 		// Disable the skill during the re-use delay and create a task EnableSkill with Medium priority to enable it at the end of the re-use delay
 		if (reuseDelay > 10)
 		{
 			disableSkill(skill.getId(), reuseDelay);
 		}
-
+	
 		// For force buff skills, start the effect as long as the player is casting.
 		if (forceBuff)
 		{
 			startForceBuff(target, skill);
 		}
-
+	
 		// launch the magic in hitTime milliseconds
 		if (hitTime > 210)
 		{
@@ -1568,16 +1570,16 @@ public abstract class L2Character extends L2Object
 				SetupGauge sg = new SetupGauge(SetupGauge.BLUE, hitTime);
 				sendPacket(sg);
 			}
-
+	
 			// Disable all skills during the casting
 			disableAllSkills();
-
+	
 			if (_skillCast != null)
 			{
 				_skillCast.cancel(true);
 				_skillCast = null;
 			}
-
+	
 			// Create a task MagicUseTask to launch the MagicSkill at the end of the casting time (hitTime)
 			// For client animation reasons (party buffs especially) 200 ms before!
 			if (getForceBuff() != null)
@@ -1593,6 +1595,9 @@ public abstract class L2Character extends L2Object
 		{
 			onMagicLaunchedTimer(targets, skill, coolTime, true);
 		}
+	
+		// Log the completion of the casting process
+		System.out.println("Completed casting skill: " + skill.getName() + " (ID: " + skill.getId() + ")");
 	}
 	
 	/**
