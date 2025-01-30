@@ -169,14 +169,19 @@ public class SpawnTable
 	
 	public void addNewSpawn(L2Spawn spawn, boolean storeInDb)
 	{
+		if (spawn == null) {
+			_log.warning("SpawnTable: Attempted to add a null spawn.");
+			return;
+		}
+	
 		_highestId++;
 		spawn.setId(_highestId);
 		_spawntable.put(_highestId, spawn);
-		
+	
 		if (storeInDb)
 		{
 			java.sql.Connection con = null;
-			
+	
 			try
 			{
 				con = L2DatabaseFactory.getInstance().getConnection();
