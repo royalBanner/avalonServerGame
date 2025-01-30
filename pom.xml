@@ -96,16 +96,17 @@
 			<artifactId>commons-logging</artifactId>
 			<version>1.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-jdk14</artifactId>
+			<version>1.7.36</version>
+		</dependency>
 		<!-- L2J -->
 		<dependency>
 			<groupId>org.bitbucket.l2jserver</groupId>
 			<artifactId>l2j-server-commons</artifactId>
 			<version>2.6.4.0</version>
 		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-jdk14</artifactId>
-			<version>1.7.36</version>
-		</dependency>
+
 	</dependencies>
 </project>
