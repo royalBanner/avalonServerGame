@@ -35,6 +35,8 @@ public abstract class QuestJython extends Quest
 	{
 		try
 		{
+			System.setProperty("python.cachedir", "/tmp/jython_cache");
+
 			// Initialize the engine for loading Jython scripts
 			_bsf = new BSFManager();
 			// Execution of all the scripts placed in data/jscript
